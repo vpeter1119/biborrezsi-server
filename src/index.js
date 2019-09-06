@@ -1,3 +1,4 @@
+var dotenv = require('dotenv').config();
 var http = require("http");
 const express = require("express");
 const bodyParser = require("body-parser");
