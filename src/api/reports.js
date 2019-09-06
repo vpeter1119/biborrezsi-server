@@ -2,6 +2,8 @@ var app = require("express");
 var router = app.Router();
 
 router.get("", (req, res, next) => {
+  var origin = req.get('origin');
+  console.log("DEVLOG: Reports GET request from: " + origin);
   res.send("Reports route.");
 });
 
