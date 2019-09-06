@@ -48,6 +48,8 @@ mongoose.connect(
 );
 
 app.get("/", (req, res, next) => {
+  var origin = req.get('origin');
+  console.log("DEVLOG: Root GET request from: " + origin);
   res.send("They see the server rolling. They hating!");
 });
 
