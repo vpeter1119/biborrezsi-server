@@ -2,7 +2,7 @@ var http = require("http");
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-const port = process.env.PORT;
+const listenPort = process.env.PORT;
 
 //Setup Express
 
@@ -67,6 +67,6 @@ http
       return;
     }
   })
-  .listen(PORT, () => {
+  .listen(listenPort, () => {
     console.log("Server is running.");
   });
