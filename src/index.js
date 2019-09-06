@@ -1,8 +1,8 @@
-var dotenv = require('dotenv').config();
 var http = require("http");
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const port = process.env.PORT;
 
 //Setup Express
 
@@ -67,6 +67,6 @@ http
       return;
     }
   })
-  .listen(8080, () => {
+  .listen(PORT, () => {
     console.log("Server is running.");
   });
