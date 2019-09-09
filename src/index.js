@@ -63,4 +63,4 @@ app.use("/api/reports", reports);
 
 ///////////////////////////////////
 //Create server
-app.listen(listenPort, () => console.log(`Example app listening on port ${listenPort}!`))
+app.listen(listenPort, () => console.log(`Biborrezsi server listening on port ${listenPort}!`))
