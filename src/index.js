@@ -64,7 +64,8 @@ app.use("/api/reports", reports);
 ///////////////////////////////////
 //Create server
 var requestListener = function (req, res) {
-  res.status(200).send('Hello world!');  
+  res.writeHead(200);
+  res.end('Hello, World!'); 
 }
 
 var server = http.createServer(requestListener);
