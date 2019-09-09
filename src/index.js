@@ -63,10 +63,4 @@ app.use("/api/reports", reports);
 
 ///////////////////////////////////
 //Create server
-var requestListener = function (req, res) {
-  res.writeHead(200);
-  res.end('Hello, World!'); 
-}
-
-var server = http.createServer(requestListener);
-server.listen(listenPort, function() { console.log("Listening on port " + listenPort)});
+app.listen(listenPort, () => console.log(`Example app listening on port ${port}!`))
