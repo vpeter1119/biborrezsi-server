@@ -61,14 +61,11 @@ const reports = require("./api/reports");
 app.use("/api/status", status);
 app.use("/api/reports", reports);
 
-//create a server object:
-http
-  .createServer(function(req, res, err) {
-    if (err) {
-      console.log(err);
-      return;
-    }
-  })
-  .listen(listenPort, () => {
-    console.log("Server is running.");
-  });
+///////////////////////////////////
+//Create server
+var requestListener = function (req, res) {
+  res.status(200).send('Hello world!');  
+}
+
+var server = http.createServer(requestListener);
+server.listen(listenPort, function() { console.log("Listening on port " + listenPort)});
