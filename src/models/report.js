@@ -5,8 +5,11 @@ const reportSchema = mongoose.Schema({
   hot: { type: Number, required: true },
   elec: { type: Number, required: true },
   heat: { type: Number, required: true },
-  isWinter: { type: Boolean, required: true }
-});
+  isWinter: { type: Boolean, required: true },
+  isApproved: { type: Boolean, required: true },
+  nr: { type: Number, required: true },
+  approveToken: { type: String, required: true }
+}, { timestamps: true });
 
 const Report = mongoose.model("Report", reportSchema);
 

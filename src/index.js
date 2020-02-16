@@ -1,4 +1,5 @@
 var http = require("http");
+require('dotenv').config()
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
@@ -30,6 +31,7 @@ app.use(function(req, res, next) {
 //Setup mongoDB
 const mongoPW = process.env.MONGODB_PW;
 const mongoUser = process.env.MONGODB_USER;
+console.log("Connecting to MongoDB...");
 mongoose.connect(
   "mongodb+srv://" +
     mongoUser +
