@@ -5,6 +5,8 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const listenPort = process.env.PORT;
 
+
+
 //Setup Express
 
 const app = express();
@@ -42,6 +44,7 @@ mongoose.connect(
   err => {
     if (!err) {
       console.log("Connected to database.");
+	  //InitialDatabaseOperations();
     } else {
       console.log(err);
       console.log("Did not connect to database.");
@@ -49,6 +52,8 @@ mongoose.connect(
   }
 );
 
+
+//Handle basic GET request
 app.get("/", (req, res, next) => {
   var origin = req.get('origin');
   console.log("DEVLOG: Root GET request from: " + origin);

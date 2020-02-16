@@ -5,10 +5,10 @@ const reportSchema = mongoose.Schema({
   hot: { type: Number, required: true },
   elec: { type: Number, required: true },
   heat: { type: Number, required: true },
-  isWinter: { type: Boolean, required: true },
-  isApproved: { type: Boolean, required: true },
+  isHeating: { type: Boolean, required: true },
+  isApproved: { type: Boolean, default: false },
   nr: { type: Number, required: true },
-  approveToken: { type: String, required: true }
+  approveToken: { type: String }
 }, { timestamps: true });
 
 const Report = mongoose.model("Report", reportSchema);
