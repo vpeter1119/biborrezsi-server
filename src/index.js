@@ -40,7 +40,7 @@ mongoose.connect(
     ":" +
     mongoPW +
     "@biborrezsi-er8qg.mongodb.net/rezsi-data",
-  { useNewUrlParser: true },
+  { useNewUrlParser: true, useUnifiedTopology: true },
   err => {
     if (!err) {
       console.log("Connected to database.");
