@@ -70,7 +70,7 @@ app.use("/api/status", status);
 app.use("/api/reports", reports);
 
 //Initial operations
-msg.SendTestMsg();
+//msg.SendTestMsg();
 
 ///////////////////////////////////
 //Create server
