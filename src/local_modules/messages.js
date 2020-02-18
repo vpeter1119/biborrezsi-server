@@ -1,13 +1,18 @@
 const nodemailer = require("nodemailer");
 const gmUser = process.env.GMAIL_USER;
-const gmPass = process.env.GMAIL_APP_PW;
+const gmClientId = process.env.GOOGLE_CID;
+const gmClientSecret = process.env.GOOGLE_CS;
+const gmRefreshToken = process.env.GOOGLE_RT;
 
 //Configure SMTP transport
 const transporter = nodemailer.createTransport({
-	service: 'gmail',
+	host: "smtp.gmail.com",
 	auth: {
+		type: "OAuth2",
 		user: gmUser,
-		pass: gmPass
+		clientId: gmClientId,
+		clientSecret: gmClientSecret,
+		refreshToken: gmRefreshToken,
 	}
 });
 
