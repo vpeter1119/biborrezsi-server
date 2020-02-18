@@ -5,6 +5,8 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const listenPort = process.env.PORT;
 
+//Set up local modules
+const msg = require("./local_modules/messages.js");
 
 
 //Setup Express
@@ -44,7 +46,6 @@ mongoose.connect(
   err => {
     if (!err) {
       console.log("Connected to database.");
-	  //InitialDatabaseOperations();
     } else {
       console.log(err);
       console.log("Did not connect to database.");
@@ -67,6 +68,9 @@ const reports = require("./api/reports");
 //Use API routes
 app.use("/api/status", status);
 app.use("/api/reports", reports);
+
+//Initial operations
+msg.SendTestMsg();
 
 ///////////////////////////////////
 //Create server
