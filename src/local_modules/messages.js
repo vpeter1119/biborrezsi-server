@@ -11,7 +11,7 @@ const transporter = nodemailer.createTransport({
 	}
 });
 
-module.exports = function SendTestMsg() {
+exports = function SendTestMsg() {
 	//Configure message data
 	var msgData = {
 		from: gmUser,
