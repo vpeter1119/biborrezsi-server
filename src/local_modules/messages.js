@@ -1,6 +1,6 @@
 const nodemailer = require("nodemailer");
 const gmUser = process.env.GMAIL_USER;
-const gmPass = process.env.GMAL_APP_PW;
+const gmPass = process.env.GMAIL_APP_PW;
 
 //Configure SMTP transport
 const transporter = nodemailer.createTransport({
