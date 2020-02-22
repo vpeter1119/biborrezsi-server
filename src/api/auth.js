@@ -11,56 +11,62 @@ router.post("/login", (req, res, next) => {
 	var userData = {};
 	//The password from the frontend form	
 	var inputPW = req.body.pw;
-	console.log("inputPW=" + inputPW);
-	var storedPW = "";
-	//The password from the database
-	User.findOne({'username':reqUser}, (err,user) => {
-		if (err) {
-			console.log("Other error:")
-			console.log(err);
-			res.status(500).json({
-				errcode:"ERR",
-				message:"Could not authenticate due to server-side error. Please try again later, or contact me."
+	console.log("inputPW=" + inputPW);	
+	
+	//Get user data from DB for password compare
+	var promiseGetUserData = new Promise((resolve, reject) => {
+		User.findOne({'username':reqUser}, (err,user) => {
+			if (err) {
+				console.log("Other error:")
+				console.log(err);
+				res.status(500).json({
+					errcode:"ERR",
+					message:"Could not authenticate due to server-side error. Please try again later, or contact me."
+				});
+			} else if (user) {
+				userData = user;
+				setTimeout( ()=> {
+					resolve(userData);
+				}, 250);
+			} else {
+				console.log("DEVLOG: Authentication failed: could not find user with username " + reqUser);
+				res.status(500).json({
+					errcode:"ERR",
+					message:"Could not authenticate due to server-side error. Please try again later, or contact me."
+				});
+			}
+		});	
+	});
+	
+	//Compare passwords after getting user data
+	promiseGetUserData.then((fetchedData) => {
+		if (inputPW == fetchedData.password) {
+			console.log("DEVLOG: Authentication successful.");
+			//Create token
+			const token = jwt.sign(
+				{
+					username: reqUser,
+					isAdmin: userData.isAdmin,
+				},
+				jwtSecret,
+				{expiresIn:"4h"}
+			);
+			//Send response with token
+			res.status(200).json({
+				token: token,
+				expiresIn: 14400,
+				message: "Authentication successful."
 			});
-		} else if (user) {
-			userData = user;
-			storedPW = user.password;
-			console.log("storedPW=" + storedPW);
-			return user.password;
 		} else {
-			console.log("DEVLOG: Authentication failed: could not find user with username " + reqUser);
-			res.status(500).json({
-				errcode:"ERR",
-				message:"Could not authenticate due to server-side error. Please try again later, or contact me."
+			console.log("DEVLOG: Authentication failed: incorrect password.");
+			//Send response
+			res.status(401).json({
+				errcode: "WRONGPW",
+				message: "Authentication failed: wrong password. Please note that the password is case-sensitive."
 			});
-		}		
-	});	
-	//Compare passwords
-	if (inputPW == storedPW) {
-		console.log("DEVLOG: Authentication successful.");
-		//Create token
-		const token = jwt.sign(
-			{
-				username: reqUser,
-				isAdmin: userData.isAdmin,
-			},
-			jwtSecret,
-			{expiresIn:"4h"}
-		);
-		//Send response with token
-		res.status(200).json({
-			token: token,
-			expiresIn: 14400,
-			message: "Authentication successful."
-		});
-	} else {
-		console.log("DEVLOG: Authentication failed: incorrect password.");
-		//Send response
-		res.status(401).json({
-			errcode: "WRONGPW",
-			message: "Authentication failed: wrong password. Please note that the password is case-sensitive."
-		});
-	}
+		}
+	});
+	
 });
 
 //Export routes
