@@ -6,18 +6,20 @@ const jwtSecret = process.env.JWT_SECRET;
 
 //Authentication with jsonwebtoken
 router.post("/login", (req, res, next) => {
+	let reqUser = req.body.username;
+	console.log("Authentication request, username=" + reqUser);
 	const userData = {};
 	//The password from the frontend form	
 	let inputPW = req.body.pw;	
 	let storedPW = "";
 	//The password from the database
-	User.findOne({username:req.body.username}, user => {
+	User.findOne({username:reqUser}, user => {
 		if (user) {
 			userData = user;
 			storedPW = user.password;
 			return user.password;
 		} else {
-			console.log("DEVLOG: Authentication failed: could not find user with username " + req.body.username);
+			console.log("DEVLOG: Authentication failed: could not find user with username " + reqUser);
 			res.status(500).json({
 				errcode:"ERR",
 				message:"Could not authenticate due to server-side error. Please try again later, or contact me."
@@ -30,7 +32,7 @@ router.post("/login", (req, res, next) => {
 		//Create token
 		const token = jwt.sign(
 			{
-				username: req.body.username,
+				username: reqUser,
 				isAdmin: userData.isAdmin,
 			},
 			jwtSecret,
