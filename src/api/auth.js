@@ -10,7 +10,8 @@ router.post("/login", (req, res, next) => {
 	console.log("Authentication request, username=" + reqUser);
 	var userData = {};
 	//The password from the frontend form	
-	var inputPW = req.body.pw;	
+	var inputPW = req.body.pw;
+	console.log("inputPW=" + inputPW);
 	var storedPW = "";
 	//The password from the database
 	User.findOne({'username':reqUser}, (err,user) => {
@@ -24,6 +25,7 @@ router.post("/login", (req, res, next) => {
 		} else if (user) {
 			userData = user;
 			storedPW = user.password;
+			console.log("storedPW=" + storedPW);
 			return user.password;
 		} else {
 			console.log("DEVLOG: Authentication failed: could not find user with username " + reqUser);
