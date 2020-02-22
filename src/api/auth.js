@@ -13,8 +13,15 @@ router.post("/login", (req, res, next) => {
 	let inputPW = req.body.pw;	
 	let storedPW = "";
 	//The password from the database
-	User.findOne({username:reqUser}, user => {
-		if (user) {
+	User.findOne({'username':reqUser}, (err,user) => {
+		if (err) {
+			console.log("Other error:")
+			console.log(err);
+			res.status(500).json({
+				errcode:"ERR",
+				message:"Could not authenticate due to server-side error. Please try again later, or contact me."
+			});
+		} else if (user) {
 			userData = user;
 			storedPW = user.password;
 			return user.password;
@@ -27,7 +34,7 @@ router.post("/login", (req, res, next) => {
 		}		
 	});	
 	//Compare passwords
-	if (inputPW === storedPW) {
+	if (inputPW == storedPW) {
 		console.log("DEVLOG: Authentication successful.");
 		//Create token
 		const token = jwt.sign(
