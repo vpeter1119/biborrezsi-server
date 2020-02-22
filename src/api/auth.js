@@ -6,12 +6,12 @@ const jwtSecret = process.env.JWT_SECRET;
 
 //Authentication with jsonwebtoken
 router.post("/login", (req, res, next) => {
-	let reqUser = req.body.username;
+	var reqUser = req.body.username;
 	console.log("Authentication request, username=" + reqUser);
-	const userData = {};
+	var userData = {};
 	//The password from the frontend form	
-	let inputPW = req.body.pw;	
-	let storedPW = "";
+	var inputPW = req.body.pw;	
+	var storedPW = "";
 	//The password from the database
 	User.findOne({'username':reqUser}, (err,user) => {
 		if (err) {
