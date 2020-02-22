@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
-const User = require("../../models/user");
+const User = require("../models/user.js");
 const jwtSecret = process.env.JWT_SECRET;
 
 //Authentication with jsonwebtoken
 router.post("/login", (req, res, next) => {
-	const userData;
+	const userData = {};
 	//The password from the frontend form	
 	let inputPW = req.body.pw;	
 	//The password from the database

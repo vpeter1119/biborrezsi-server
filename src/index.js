@@ -64,10 +64,12 @@ app.get("/", (req, res, next) => {
 //Declare API routes
 const status = require("./api/status");
 const reports = require("./api/reports");
+const auth = require("./api/auth");
 
 //Use API routes
 app.use("/api/status", status);
 app.use("/api/reports", reports);
+app.use("/api/auth", auth);
 
 //Initial operations
 //msg.SendTestMsg();
