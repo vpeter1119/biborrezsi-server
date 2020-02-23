@@ -1,8 +1,10 @@
 var app = require("express");
 var router = app.Router();
-const Report = require("../models/report.js");
 
-router.get("", (req, res, next) => {
+const Report = require("../models/report.js");
+const checkAuth = require("../middleware/check-auth");
+
+router.get("", checkAuth, (req, res, next) => {
   var origin = req.get('origin');
   console.log("DEVLOG: Reports GET request from: " + origin);
   Report.find({}, (err,reportsList) => {
