@@ -25,12 +25,14 @@ router.get("", checkAuth, (req, res, next) => {
 			  nr: rep.nr,
 				}
 		});
-		  res.status(200).json(reportsList);
+		  res.status(200).json(responseData);
 	  }
   });
 });
 
 router.post("", checkAuth, (req, res, next) => {
+  var origin = req.get('origin');
+  console.log("DEVLOG: Reports POST request from: " + origin);
   var input = req.body;
   //Send input for validation before doing anything else
   var inputValidated = new Promise((resolve,reject) => {
