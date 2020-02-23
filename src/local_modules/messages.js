@@ -45,14 +45,14 @@ exports.SendTestMsg = function SendTestMsg() {
 	SendMessage(msgData);
 }
 
-//Aprove message function (Exported)
+//Approve message function (Exported)
 exports.SendApproveMsg = function SendApproveMsg(reportData, reportId, approveToken) {
 	//Configure message data
 	var msgData = {
 		from: gmUser,
 		to: gmUser,
 		subject: "[Biborrezsi Server] New report on Bíbor Rezsi!",
-		html: '<html><body><p>User has submitted a new report to Bíborrezsi Server:</p><h4>Report report_id</h4><table><thead><th>Név</th><th>Állás</th></thead><tbody><tr><td>Hidegvíz</td><td>'+ reportData.cold +'</td></tr></tbody></table><p>Click on the link below to approve the report:</p><p><a href="https://biborrezsi-server.herokuapp.com/api/report?id=report_id&a=approve&t=approve_token">[APPROVE]</a></p></body></html>'
+		html: '<p>User has submitted a new report to Bíborrezsi Server:</p><h4>Report report_id</h4><table><thead><th>Név</th><th>Állás</th></thead><tbody><tr><td>Hidegvíz</td><td>'+ reportData.cold +'</td></tr></tbody></table><p>Click on the link below to approve the report:</p><p><a href="https://biborrezsi-server.herokuapp.com/api/report?id=report_id&a=approve&t=approve_token">[APPROVE]</a></p>'
 	};
 	
 	//Send the message
