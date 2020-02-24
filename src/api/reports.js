@@ -6,7 +6,7 @@ const Report = require("../models/report.js");
 const checkAuth = require("../middleware/check-auth");
 
 //Report route functions
-private function GetAllReports() {
+GetAllReports() {
 	Report.find({}, (err, reports) => {
 		if (err) {
 			console.log(err);
