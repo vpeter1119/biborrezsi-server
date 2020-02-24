@@ -116,10 +116,10 @@ function validateInput(input, oldReports) {
 	console.log(input);
 	console.log("Comparing input to old report:");
 	console.log(lastReport);
-	var a = (lastReport.cold < input.cold);
-	var b = (lastReport.hot < input.hot);
-	var c = (lastReport.heat < input.heat);
-	var d = (lastReport.elec < input.elec);
+	var a = (lastReport.cold > input.cold);
+	var b = (lastReport.hot > input.hot);
+	var c = (lastReport.heat > input.heat);
+	var d = (lastReport.elec > input.elec);
 	var e = (input.cold==0);
 	var f = (input.hot==0);
 	var g = (input.heat==0);
