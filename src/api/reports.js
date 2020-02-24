@@ -116,7 +116,7 @@ function validateInput(input, oldReports) {
 	console.log(input);
 	console.log("Comparing input to old report:");
 	console.log(lastReport);
-	console.log(lastReport.cold < input.cold + lastReport.hot < input.hot +| lastReport.heat < input.heat + lastReport.elec < input.elec + input.cold==0 + input.hot==0 + input.heat==0 + input.elec==0);
+	console.log(lastReport.cold < input.cold + lastReport.hot < input.hot + lastReport.heat < input.heat + lastReport.elec < input.elec + input.cold==0 + input.hot==0 + input.heat==0 + input.elec==0);
 	if (lastReport.cold < input.cold || lastReport.hot < input.hot || lastReport.heat < input.heat || lastReport.elec < input.elec || input.cold==0 || input.hot==0 || input.heat==0 || input.elec==0) {
 		console.log("Validation failed.");
 		return false;
