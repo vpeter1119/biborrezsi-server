@@ -120,7 +120,8 @@ router.post("", checkAuth, (req, res, next) => {
 
 //Validate input data
 function validateInput(input, oldReports) {
-	var lastReport = oldReports[(oldReports.length - 1)];
+	var approvedRecords = oldReports.filter(rep => {return rep.isApproved});
+	var lastReport = approvedRecords[(approvedRecords.length - 1)];
 	//Declaring conditions - sum must be 0 to validate
 	var a = (lastReport.cold > input.cold);
 	var b = (lastReport.hot > input.hot);
