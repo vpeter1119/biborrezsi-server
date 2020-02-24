@@ -14,6 +14,7 @@ function GetAllReports() {
 			return(null);
 		} else {
 			console.log("DEVLOG: Success.");
+			console.log(reports);
 			return(reports);
 		}
 	});
