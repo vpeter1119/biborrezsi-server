@@ -5,29 +5,44 @@ var rs = require("randomstring");
 const Report = require("../models/report.js");
 const checkAuth = require("../middleware/check-auth");
 
+//Report route functions
+private function GetAllReports() {
+	Report.find({}, (err, reports) => {
+		if (err) {
+			console.log(err);
+			console.log("Could not retrieve reports list from server.");
+			return(null);
+		} else {
+			console.log("Success.");
+			return(reports);
+		}
+	});
+}
+
+//API endpoints
+
 router.get("", checkAuth, (req, res, next) => {
-  var origin = req.get('origin');
-  console.log("DEVLOG: Reports GET request from: " + origin);
-  Report.find({'isApproved':true}, (err,reportsList) => {
-	  if (err) {
-		  console.log(err);
-		  console.log("Could not retrieve reports list from server.");
-		  res.status(500).json({message:"Something went wrong."})
-	  } else {
-		  console.log("Success.");
-		  var responseData = reportsList.map( function (rep) {
-			  return {
-			  cold: rep.cold,
-			  hot: rep.hot,
-			  heat: rep.heat,
-			  elec: rep.elec,
-			  isHeating: rep.isHeating,
-			  nr: rep.nr,
-				}
+	var origin = req.get('origin');
+	console.log("DEVLOG: Reports GET request from: " + origin);
+	var reportsList = GetAllReports();
+	if (reportsList==null) {
+		res.status(500).json({message:"Something went wrong."});
+	} else {
+		var responseDataRaw = reportsList.filter(report => {
+			return report.isApproved;
 		});
-		  res.status(200).json(responseData);
-	  }
-  });
+		var responseData = reportsList.map( function (rep) {
+			return {
+				cold: rep.cold,
+				hot: rep.hot,
+				heat: rep.heat,
+				elec: rep.elec,
+				isHeating: rep.isHeating,
+				nr: rep.nr,
+			}
+		});
+		res.status(200).json(responseData);
+	}
 });
 
 router.post("", checkAuth, (req, res, next) => {
