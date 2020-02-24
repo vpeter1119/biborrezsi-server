@@ -10,10 +10,10 @@ function GetAllReports() {
 	Report.find({}, (err, reports) => {
 		if (err) {
 			console.log(err);
-			console.log("Could not retrieve reports list from server.");
+			console.log("DEVLOG: Could not retrieve reports list from server.");
 			return(null);
 		} else {
-			console.log("Success.");
+			console.log("DEVLOG: Success.");
 			return(reports);
 		}
 	});
@@ -28,16 +28,18 @@ router.get("", checkAuth, (req, res, next) => {
 		var reportsList = GetAllReports();
 		setTimeout(()=>{
 			resolve(reportsList);
-		}, 250);
+		}, 300);
 	});
 	GetAllReportsPromise.then(reportsList => {
 		if (reportsList==null) {
+			console.log("DEVLOG: reports list is " + reportsList);
 			res.status(500).json({message:"Something went wrong."});
 		} else {
 			var responseDataRaw = reportsList.filter(report => {
-				return report.isApproved;
+				return report.isApproved == true;
 			});
-			var responseData = reportsList.map( function (rep) {
+			console.log("DEVLOG: " + responseDataRaw);
+			var responseData = responseDataRaw.map( function (rep) {
 				return {
 					cold: rep.cold,
 					hot: rep.hot,
@@ -47,6 +49,7 @@ router.get("", checkAuth, (req, res, next) => {
 					nr: rep.nr,
 				}
 			});
+			console.log("DEVLOG: " + responseData);
 			res.status(200).json(responseData);
 		}
 	});
