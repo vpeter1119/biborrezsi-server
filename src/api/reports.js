@@ -94,9 +94,17 @@ router.post("", checkAuth, (req, res, next) => {
 			//Set approve token
 			newReport.approveToken = rs.generate();
 			console.log(newReport);
-			res.status(200).send({
-				message: "Got the report!",
-				report: newReport
+			//Save the new report to the DB
+			Report.create(newReport, (err, reportCreated) => {
+				if (err) {
+					console.log(err);
+					console.log("DEVLOG: Could not save report to database.");
+					res.status(500).json({message:"An error has occurred. Please try again later."});
+				} else {
+					console.log(reportCreated);
+					console.log("DEVLOG: New report saved.");
+					res.status(201).json({message:"Your report was saved.",report:newReport});
+				}
 			});
 		}, () => {
 		  //Handle validation rejection
