@@ -66,6 +66,10 @@ router.post("", checkAuth, (req, res, next) => {
 		}, 250);
 	});
 	GetAllReportsPromise.then(reports => {
+		//Handle the heat value
+		if (input.heat == 0 || input.heat == null) {
+			input.heat = reports[(reports.length-1)].heat;
+		}
 		//Send input for validation before doing anything else
 		var inputValidated = new Promise((resolve,reject) => {
 		  var isValidated = validateInput(input, reports);
@@ -77,12 +81,6 @@ router.post("", checkAuth, (req, res, next) => {
 		});
 		inputValidated.then(vInput => {
 			//Process the validated input
-			var newHeat = 0;
-			if (vInput.heat == 0 || vInput.heat == null) {
-				//heat should be set to value in latest report
-			} else {
-				newHeat = vInput.heat;
-			}
 			var newReport = {
 				cold: vInput.cold,
 				hot: vInput.hot,
@@ -112,10 +110,7 @@ router.post("", checkAuth, (req, res, next) => {
 //Validate input data
 function validateInput(input, oldReports) {
 	var lastReport = oldReports[(oldReports.length - 1)];
-	console.log("Input is:");
-	console.log(input);
-	console.log("Comparing input to old report:");
-	console.log(lastReport);
+	//Declaring conditions - sum must be 0 to validate
 	var a = (lastReport.cold > input.cold);
 	var b = (lastReport.hot > input.hot);
 	var c = (lastReport.heat > input.heat);
@@ -123,13 +118,12 @@ function validateInput(input, oldReports) {
 	var e = (input.cold==0);
 	var f = (input.hot==0);
 	var g = (input.heat==0);
-	var h = (input.elec==0);
-	console.log(a+b+c+d+e+f+g+h);
+	var h = (input.elec==0);	
 	if ((a+b+c+d+e+f+g+h)>0) {
-		console.log("Validation failed.");
+		console.log("DEVLOG: Validation failed.");
 		return false;
 	} else {
-		console.log("Validation OK.");
+		console.log("DEVLOG: Validation OK.");
 		return true;
 	}
 }
