@@ -7,7 +7,7 @@ const checkAuth = require("../middleware/check-auth");
 
 //Report route functions
 function GetAllReports() {
-	Report.find({}, (err, reports) => {
+	return Report.find({}, (err, reports) => {
 		if (err) {
 			console.log(err);
 			console.log("DEVLOG: Could not retrieve reports list from server.");
