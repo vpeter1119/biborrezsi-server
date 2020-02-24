@@ -124,6 +124,7 @@ function validateInput(input, oldReports) {
 	var f = (input.hot==0);
 	var g = (input.heat==0);
 	var h = (input.elec==0);
+	console.log(a+b+c+d+e+f+g+h);
 	if ((a+b+c+d+e+f+g+h)>0) {
 		console.log("Validation failed.");
 		return false;
