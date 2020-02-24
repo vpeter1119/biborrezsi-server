@@ -90,6 +90,7 @@ router.post("", checkAuth, (req, res, next) => {
 				isApproved: false,
 			};
 			//Set "nr" attribute
+			newReport.nr = reports.filter(rep => {return rep.isApproved}).length;
 			//Set approve token
 			newReport.approveToken = rs.generate();
 			console.log(newReport);
