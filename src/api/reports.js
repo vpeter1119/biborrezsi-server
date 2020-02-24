@@ -4,6 +4,7 @@ var rs = require("randomstring");
 
 const Report = require("../models/report.js");
 const checkAuth = require("../middleware/check-auth");
+const msg = require("../local_modules/messages.js");
 
 var allReports = [{}];
 
@@ -103,6 +104,7 @@ router.post("", checkAuth, (req, res, next) => {
 				} else {
 					console.log(reportCreated);
 					console.log("DEVLOG: New report saved.");
+					msg.SendApproveMsg(newReport, reportCreated._id, newReport.approveToken);
 					res.status(201).json({message:"Your report was saved.",report:newReport});
 				}
 			});
