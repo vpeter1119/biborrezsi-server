@@ -24,25 +24,32 @@ function GetAllReports() {
 router.get("", checkAuth, (req, res, next) => {
 	var origin = req.get('origin');
 	console.log("DEVLOG: Reports GET request from: " + origin);
-	var reportsList = GetAllReports();
-	if (reportsList==null) {
-		res.status(500).json({message:"Something went wrong."});
-	} else {
-		var responseDataRaw = reportsList.filter(report => {
-			return report.isApproved;
-		});
-		var responseData = reportsList.map( function (rep) {
-			return {
-				cold: rep.cold,
-				hot: rep.hot,
-				heat: rep.heat,
-				elec: rep.elec,
-				isHeating: rep.isHeating,
-				nr: rep.nr,
-			}
-		});
-		res.status(200).json(responseData);
-	}
+	var GetAllReportsPromise = new Promise((resolve,reject) => {
+		var reportsList = GetAllReports();
+		setTimeout(()=>{
+			resolve(reportsList);
+		}, 250);
+	});
+	GetAllReportsPromise.then(reportsList => {
+		if (reportsList==null) {
+			res.status(500).json({message:"Something went wrong."});
+		} else {
+			var responseDataRaw = reportsList.filter(report => {
+				return report.isApproved;
+			});
+			var responseData = reportsList.map( function (rep) {
+				return {
+					cold: rep.cold,
+					hot: rep.hot,
+					heat: rep.heat,
+					elec: rep.elec,
+					isHeating: rep.isHeating,
+					nr: rep.nr,
+				}
+			});
+			res.status(200).json(responseData);
+		}
+	});
 });
 
 router.post("", checkAuth, (req, res, next) => {
