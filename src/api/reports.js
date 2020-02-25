@@ -1,6 +1,7 @@
 var app = require("express");
 var router = app.Router();
 var rs = require("randomstring");
+var mongoose = require("mongoose");
 
 const Report = require("../models/report.js");
 const checkAuth = require("../middleware/check-auth");
@@ -22,16 +23,23 @@ function GetAllReports() {
 	});
 };
 function FindReport(id) {
-	return Report.findById(id, (err, report) => {
-		if (err) {
-			console.log(err);
-			console.log("DEVLOG: Could not retrieve report from database.");
-			return(null);
-		} else {
-			console.log("DEVLOG: Report fetched from database.");
-			return(report);
-		}
-	});
+	var idIsValid = (mongoose.Types.ObjectId.isValid(id));
+	if (idIsValid) {
+		return Report.findById(id, (err, report) => {
+			if (err) {
+				console.log(err);
+				console.log("DEVLOG: Could not retrieve report from database.");
+				return(null);
+			} else {
+				console.log("DEVLOG: Report fetched from database.");
+				return(report);
+			}
+		});
+	} else {
+		console.log("DEVLOG: " + id + " is not a valid ID.");
+		return(null);
+	}
+	
 };
 
 //API endpoints
