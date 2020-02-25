@@ -159,22 +159,25 @@ router.get("/:id/approve", (req,res,next) => { //URL: <server>/api/reports/:id?t
 				errcode: "NOTFOUND",
 				message: "Could not find report."
 			});
-		} else if (rep.approveToken != approveToken) {
+		} else if (rep.approveToken != approveToken && rep!=null) {
 			console.log("DEVLOG: Request denied: wrong token.");
 			//Deny the request
 			res.status(401).json({
 				errcode: "NOAUTH",
 				message: "Not authorized to access resource."
 			});
-		} else if (rep.approveToken == approveToken) {
+		} else if (rep.approveToken == approveToken && rep!=null) {
 			//Approve the report
 			//STEPS:
 			//1. Update report: isApproved=true, approveToken=null
 			var ReportApproved = new Promise((resolve, reject) => {
+				console.log("DEVLOG: Finding report to approve by id=" + id);
 				Report.findOneAndUpdate({_id:id}, {isApproved:true,approveToken:null}, (err, updatedReport) => {
 					if (err) {
 						//Handle error
 						console.log(err);
+						console.log("DEVLOG: An error has occured while updating record.");
+						reject();
 						res.status(500).json({message: "An error has occurred. Please try again later."});
 					} else {
 						setTimeout(()=>{
@@ -183,6 +186,9 @@ router.get("/:id/approve", (req,res,next) => { //URL: <server>/api/reports/:id?t
 						}, 250);
 					}
 				});
+			}, () => {
+				//Promise was rejected due to an error while updating
+				console.log("DEVLOG: Promise was rejected due to an error while updating");
 			});
 			ReportApproved.then((approvedRecord) => {
 				//2. Delete other unapproved reports with the same "nr"
@@ -190,6 +196,7 @@ router.get("/:id/approve", (req,res,next) => { //URL: <server>/api/reports/:id?t
 					if (err) {
 						//Handle error
 						console.log(err);
+						console.log("DEVLOG: An error has occured while deleting unapproved records.");
 						res.status(500).json({message: "An error has occurred. Please try again later."});
 					} else {
 						console.log("DEVLOG: Unapproved reports deleted.");
@@ -210,6 +217,7 @@ router.get("/:id/approve", (req,res,next) => { //URL: <server>/api/reports/:id?t
 		}
 	}, () => {
 		//Promise was rejected: could not find report, wrong id?
+		console.log("DEVLOG: Promise rejected.");
 		res.status(404).json({
 			errcode: "NOTFOUND",
 			message: "Could not find report."
