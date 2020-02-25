@@ -208,6 +208,12 @@ router.get("/:id/approve", (req,res,next) => { //URL: <server>/api/reports/:id?t
 			console.log("DEVLOG: Request denied: other error.");
 			res.status(500).json({message: "An error has occurred. Please try again later."});
 		}
+	}, () => {
+		//Promise was rejected: could not find report, wrong id?
+		res.status(404).json({
+			errcode: "NOTFOUND",
+			message: "Could not find report."
+		});
 	});
 });
 
