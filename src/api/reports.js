@@ -226,10 +226,6 @@ router.get("/:id/approve", (req,res,next) => { //URL: <server>/api/reports/:id?t
 	}, () => {
 		//Promise was rejected: could not find report, wrong id?
 		console.log("DEVLOG: Promise rejected.");
-		res.status(404).json({
-			errcode: "NOTFOUND",
-			message: "Could not find report."
-		});
 	});
 });
 
