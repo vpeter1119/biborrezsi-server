@@ -1,6 +1,7 @@
 var app = require("express");
 var router = app.Router();
 var rs = require("randomstring");
+var mongoose = require("mongoose");
 
 const Report = require("../models/report.js");
 const checkAuth = require("../middleware/check-auth");
@@ -13,14 +14,33 @@ function GetAllReports() {
 	return Report.find({}, (err, reports) => {
 		if (err) {
 			console.log(err);
-			console.log("DEVLOG: Could not retrieve reports list from server.");
+			console.log("DEVLOG: Could not retrieve reports list from database.");
 			return(null);
 		} else {
-			console.log("DEVLOG: Success.");
+			console.log("DEVLOG: Reports fetched from database.");
 			return(reports);
 		}
 	});
-}
+};
+function FindReport(id) {
+	var idIsValid = (mongoose.Types.ObjectId.isValid(id));
+	if (idIsValid) {
+		return Report.findById(id, (err, report) => {
+			if (err) {
+				console.log(err);
+				console.log("DEVLOG: Could not retrieve report from database.");
+				return(null);
+			} else {
+				console.log("DEVLOG: Report fetched from database.");
+				return(report);
+			}
+		});
+	} else {
+		console.log("DEVLOG: " + id + " is not a valid ID.");
+		return(null);
+	}
+	
+};
 
 //API endpoints
 
@@ -115,6 +135,97 @@ router.post("", checkAuth, (req, res, next) => {
 			  message: "Input validation failed.",
 		  });
 		});
+	});
+});
+
+router.get("/:id/approve", (req,res,next) => { //URL: <server>/api/reports/:id?t=<approveToken>
+	var origin = req.params.origin;
+	var id = req.params.id;	
+	var approveToken = req.query.t; //substitute for authentication
+	var report = {};
+	console.log("DEVLOG: Approve request for report " + id + " with token " + approveToken + " from " + origin);
+	//Find report by id
+	var ReportFound = new Promise((resolve, reject) => {
+		report = FindReport(id);
+		if (report!=null) {
+			setTimeout(()=>{
+				resolve(report);
+			}, 250);
+		} else {
+			reject();
+			res.status(404).json({
+				errcode: "NOTFOUND",
+				message: "Could not find report."
+			});
+		}
+	});
+	ReportFound.then((rep) => {
+		if (rep==null) { //This should not be reached at all but lets leave it here for now
+			//Deny the request
+			console.log("DEVLOG: Request denied: report not found.");
+			res.status(404).json({
+				errcode: "NOTFOUND",
+				message: "Could not find report."
+			});
+		} else if (rep.approveToken != approveToken && rep!=null) {
+			console.log("DEVLOG: Request denied: wrong token.");
+			//Deny the request
+			res.status(401).json({
+				errcode: "NOAUTH",
+				message: "Not authorized to access resource."
+			});
+		} else if (rep.approveToken == approveToken && rep!=null) {
+			//Approve the report
+			//STEPS:
+			//1. Update report: isApproved=true, approveToken=null
+			var ReportApproved = new Promise((resolve, reject) => {
+				console.log("DEVLOG: Finding report to approve by id=" + id);
+				Report.findOneAndUpdate({_id:id}, {isApproved:true,approveToken:null}, (err, updatedReport) => {
+					if (err) {
+						//Handle error
+						console.log(err);
+						console.log("DEVLOG: An error has occured while updating record.");
+						reject();
+						res.status(500).json({message: "An error has occurred. Please try again later."});
+					} else {
+						setTimeout(()=>{
+							console.log("DEVLOG: Report attribute isApproved set to true.");
+							resolve(updatedReport);
+						}, 250);
+					}
+				});
+			}, () => {
+				//Promise was rejected due to an error while updating
+				console.log("DEVLOG: Promise was rejected due to an error while updating");
+			});
+			ReportApproved.then((approvedRecord) => {
+				//2. Delete other unapproved reports with the same "nr"
+				Report.deleteMany({'isApproved':false,'nr':approvedRecord.nr}, (err) => {
+					if (err) {
+						//Handle error
+						console.log(err);
+						console.log("DEVLOG: An error has occured while deleting unapproved records.");
+						res.status(500).json({message: "An error has occurred. Please try again later."});
+					} else {
+						console.log("DEVLOG: Unapproved reports deleted.");
+					}
+				});
+				//3. Send message to maintenance
+				//4. Send message to end user
+				//5. Send message to admin (me)
+				//6. Send response to client
+				res.status(200).json({message:"Report approved successfully."});
+			});
+			
+			
+		} else {
+			//This should not be even possible but let's just leave it here for now
+			console.log("DEVLOG: Request denied: other error.");
+			res.status(500).json({message: "An error has occurred. Please try again later."});
+		}
+	}, () => {
+		//Promise was rejected: could not find report, wrong id?
+		console.log("DEVLOG: Promise rejected.");
 	});
 });
 
