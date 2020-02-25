@@ -16,7 +16,7 @@ function GetAllReports() {
 			console.log("DEVLOG: Could not retrieve reports list from database.");
 			return(null);
 		} else {
-			console.log("DEVLOG: Success.");
+			console.log("DEVLOG: Reports fetched from database.");
 			return(reports);
 		}
 	});
@@ -28,7 +28,7 @@ function FindReport(id) {
 			console.log("DEVLOG: Could not retrieve report from database.");
 			return(null);
 		} else {
-			console.log("DEVLOG: Success.");
+			console.log("DEVLOG: Report fetched from database.");
 			return(report);
 		}
 	});
@@ -139,12 +139,20 @@ router.get("/:id/approve", (req,res,next) => { //URL: <server>/api/reports/:id?t
 	//Find report by id
 	var ReportFound = new Promise((resolve, reject) => {
 		report = FindReport(id);
-		setTimeout(()=>{
-			resolve(report);
-		}, 250);
+		if (report!=null) {
+			setTimeout(()=>{
+				resolve(report);
+			}, 250);
+		} else {
+			reject();
+			res.status(404).json({
+				errcode: "NOTFOUND",
+				message: "Could not find report."
+			});
+		}
 	});
 	ReportFound.then((rep) => {
-		if (rep==null) {
+		if (rep==null) { //This should not be reached at all but lets leave it here for now
 			//Deny the request
 			console.log("DEVLOG: Request denied: report not found.");
 			res.status(404).json({
@@ -166,6 +174,8 @@ router.get("/:id/approve", (req,res,next) => { //URL: <server>/api/reports/:id?t
 				Report.findOneAndUpdate({_id:id}, {isApproved:true,approveToken:null}, (err, updatedReport) => {
 					if (err) {
 						//Handle error
+						console.log(err);
+						res.status(500).json({message: "An error has occurred. Please try again later."});
 					} else {
 						setTimeout(()=>{
 							console.log("DEVLOG: Report attribute isApproved set to true.");
@@ -174,12 +184,13 @@ router.get("/:id/approve", (req,res,next) => { //URL: <server>/api/reports/:id?t
 					}
 				});
 			});
-			
 			ReportApproved.then((approvedRecord) => {
 				//2. Delete other unapproved reports with the same "nr"
 				Report.deleteMany({'isApproved':false,'nr':approvedRecord.nr}, (err) => {
 					if (err) {
 						//Handle error
+						console.log(err);
+						res.status(500).json({message: "An error has occurred. Please try again later."});
 					} else {
 						console.log("DEVLOG: Unapproved reports deleted.");
 					}
