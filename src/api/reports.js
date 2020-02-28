@@ -125,7 +125,7 @@ router.post("", checkAuth, (req, res, next) => {
 					console.log(reportCreated);
 					console.log("DEVLOG: New report saved.");
 					msg.SendApproveMsg(newReport, reportCreated._id, newReport.approveToken);
-					res.status(201).json({message:"Your report was saved.",report:newReport});
+					res.status(201).json({message:"Your report was saved."});
 				}
 			});
 		}, () => {
