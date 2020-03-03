@@ -1,4 +1,5 @@
 const nodemailer = require("nodemailer");
+const Email = require('email-templates');
 const gmUser = process.env.GMAIL_USER;
 const gmClientId = process.env.GOOGLE_CID;
 const gmClientSecret = process.env.GOOGLE_CS;
@@ -17,10 +18,26 @@ const transporter = nodemailer.createTransport({
 	}
 });
 
+//Configure generic email instance
+const email = new Email({
+	message: {from: gmUser},
+	send: true,
+	transport: transporter,	
+});
+
 //Message send function (Common)
-function SendMessage(msgData){
+function SendMessage(sendTo, msgTemplate, msgData){
 	
-	transporter.sendMail(msgData, (error,info) => {
+	email.send({
+		//Configure message data
+		template: msgTemplate,
+		message: {to: sendTo},
+		locals: msgData,
+	})
+	.then(console.log)
+	.catch(console.error);
+	
+	/* transporter.sendMail(msgData, (error,info) => {
 		console.log("DEVLOG: Sending message to " + msgData.to);
 		if (error) {
 			console.log(error);
@@ -28,21 +45,20 @@ function SendMessage(msgData){
 		} else {
 			console.log("DEVLOG: Message sent to " + msgData.to + ". Response: " + info.response);
 		}
-	});
+	}); */
 };
 
 //Test message function (Exported)
 exports.SendTestMsg = function SendTestMsg() {
 	//Configure message data
+	var msgTemplate = '';
 	var msgData = {
-		from: gmUser,
-		to: gmUser,
-		subject: "Test email from Bíborrezsi nodejs server",
-		text: "This email serves to test the nodemailer functionalities."
+		message: 'This is the correct test message.',
+		link: '/api/status',
 	};
 	
 	//Send the message
-	SendMessage(msgData);
+	SendMessage(gmUser, msgTemplate, msgData);
 }
 
 //Approve message function (Exported)
