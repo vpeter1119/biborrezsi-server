@@ -51,7 +51,7 @@ function SendMessage(sendTo, msgTemplate, msgData){
 //Test message function (Exported)
 exports.SendTestMsg = function SendTestMsg() {
 	//Configure message data
-	var msgTemplate = '';
+	var msgTemplate = 'test-message';
 	var msgData = {
 		message: 'This is the correct test message.',
 		link: '/api/status',
