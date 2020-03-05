@@ -36,12 +36,19 @@ function SendMessage(msgData){
 //Test message function (Exported)
 exports.SendTestMsg = function () {
 	//Configure message data
+	var testData = {
+		key1: 'value',
+		key2: 2,
+		key3: true
+	};
+	
 	var link = serverUrl + 'api/status';
+	var msgHtml = '<p>Value is ' + testData.key1 + 'two is ' + testData.key2 + ', boolean is ' + testData.key3 + '</p><br><a href="' + link + '">Server Status</a>';
 	
 	var msgData = {
 		to: gmUser,
 		subject: '[Biborrezsi] Teszt üzenet',
-		text: 'Kérlek kattints a következő hivatkozásra: ' + link
+		html: msgHtml
 	};
 	
 	//Send the message
@@ -52,11 +59,15 @@ exports.SendTestMsg = function () {
 exports.SendApproveMsg = function (reportData, reportId, approveToken) {
 	//Configure message data
 	var link = serverUrl + 'api/reports/' + reportId + '/approve?t=' + approveToken;
+	
+	var msgHtml = '<p>Új jelentés érkezett a Bíbor Rezsi weboldalon.</p><h4>Jelentés #'+reportid+'</h4><p>Hidegvíz: '+reportData.cold+'</p><p>Melegvíz: '+reportData.hot+'</p><p>Hőmennyiség: '+reportData.heat+'</p><p>Villanyóra: '+reportData.elec+'</p><p><a href="'+link+'">[ Jóváhagyás ]</a></p>'
+	
 	var msgData = {
 		to: gmUser,
 		subject: '[Biborrezsi] Új óraállás-jelentés',
-		text: 'Új jelentés érkezett a Bíbor Rezsi weboldalon. Kattints ide a jóváhagyáshoz: ' + link
+		text: msgHtml
 	};
+	
 	
 	//Send the message
 	SendMessage(msgData);
