@@ -1,5 +1,6 @@
 const nodemailer = require("nodemailer");
 const Email = require('email-templates');
+const mailRoot = __dirname;
 const gmUser = process.env.GMAIL_USER;
 const gmClientId = process.env.GOOGLE_CID;
 const gmClientSecret = process.env.GOOGLE_CS;
@@ -19,8 +20,9 @@ const transporter = nodemailer.createTransport({
 });
 
 //Configure generic email instance
+console.log("DEVLOG: " + mailRoot);
 const email = new Email({
-	views: { root: __dirname },
+	views: { root: mailRoot },
 	message: {from: gmUser},
 	send: true,
 	transport: transporter,	
