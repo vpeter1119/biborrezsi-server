@@ -80,7 +80,7 @@ exports.SendApproveMsg = function (reportData, reportId, approveToken) {
 //Final message function (Exported)
 exports.SendFinalMsg = function (reportData) {
 	//Configure message data
-	var msgHtml = '<p>Tisztelt '+adminRecName+'!</p><p>A '+myAddress+' aktuális mérőóra-állásai:</p><br><p>Hidegvíz: '+reportData.cold+'</p><p>Melegvíz: '+reportData.hot+'</p><p>Hőmennyiség: '+reportData.heat+'</p><p>Villanyóra: '+reportData.elec+'</p><br><p>Köszönettel és üdvözlettel:</p><p>'+myName+'</p>';
+	var msgHtml = '<p>Tisztelt '+finalRecName+'!</p><p>A '+myAddress+' aktuális mérőóra-állásai:</p><br><p>Hidegvíz: '+reportData.cold+'</p><p>Melegvíz: '+reportData.hot+'</p><p>Hőmennyiség: '+reportData.heat+'</p><p>Villanyóra: '+reportData.elec+'</p><br><p>Köszönettel és üdvözlettel:</p><p>'+myName+'</p>';
 	
 	var msgData = {
 		to: gmUser,
