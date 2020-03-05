@@ -131,13 +131,15 @@ router.post("", checkAuth, (req, res, next) => {
 					console.log("DEVLOG: previousReportA=" + previousReportA);
 					var prevRep = previousReportA[0];
 					console.log("DEVLOG: prevRep=" + prevRep);
+					console.log("DEVLOG: cold difference="+(reportCreated.cold - prevRep.cold));
 					var diffData = {
-						cold: reportCreated.cold - prevRep.cold,
-						hot: reportCreated.hot - prevRep.hot,
-						heat: reportCreated.heat - prevRep.heat,
-						elec: reportCreated.elec - prevRep.elec
+						cold: (reportCreated.cold - prevRep.cold),
+						hot: (reportCreated.hot - prevRep.hot),
+						heat: (reportCreated.heat - prevRep.heat),
+						elec: (reportCreated.elec - prevRep.elec)
 					};
 					console.log("DEVLOG: diffData=" + diffData);
+					console.log("DEVLOG: diffData.cold=" + diffData.cold);
 					//Send approve message
 					msg.SendApproveMsg(newReport, diffData, reportCreated._id, newReport.approveToken);
 					//Send response
