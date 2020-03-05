@@ -1,6 +1,7 @@
 const nodemailer = require("nodemailer");
-const Email = require('email-templates');
+const EmailTemplate = require('email-templates').EmailTemplate;
 const mailRoot = (__dirname + '/emails');
+const serverUrl = "https://biborrezsi-server.herokuapp.com/";
 const gmUser = process.env.GMAIL_USER;
 const gmClientId = process.env.GOOGLE_CID;
 const gmClientSecret = process.env.GOOGLE_CS;
@@ -18,6 +19,29 @@ const transporter = nodemailer.createTransport({
 		refreshToken: gmRefreshToken,
 	}
 });
+
+//Template-based sender function
+var sendTestEmail = transporter.templateSender(
+	new EmailTemplate('./templates/test'), {from: gmUser}
+);
+
+exports.SendTestMsg = function () {
+	sendTestEmail({
+		to: gmUser,
+		subject: 'Test email from Biborrezsi Server'
+	}, {
+		message: 'This is the correct test message.',
+		link: (serverUrl + '/api/status')
+	}, function (err, info) {
+		if (err) {
+			console.log(err);
+		} else {
+			console.log('Link sent\n' + JSON.stringify(info));
+		}
+	});
+};
+
+///////////////////////////////////////////////////////
 
 //Configure generic email instance
 console.log("DEVLOG: " + mailRoot);
@@ -52,7 +76,7 @@ function SendMessage(sendTo, msgTemplate, msgData){
 };
 
 //Test message function (Exported)
-exports.SendTestMsg = function SendTestMsg() {
+/* exports.SendTestMsg = function SendTestMsg() {
 	//Configure message data
 	var msgTemplate = 'test-message';
 	var msgData = {
@@ -62,20 +86,4 @@ exports.SendTestMsg = function SendTestMsg() {
 	
 	//Send the message
 	SendMessage(gmUser, msgTemplate, msgData);
-}
-
-//Approve message function (Exported)
-exports.SendApproveMsg = function SendApproveMsg(reportData, reportId, approveToken) {
-	//Set message text
-	var content = ('<p>User has submitted a new report to Bíborrezsi Server:</p><p><a href=biborrezsi-server.herokuapp.com/api/reports/"' + reportId + '/approve?t=' + approveToken + '"></a></p>');
-	//Configure message data
-	var msgData = {
-		from: gmUser,
-		to: gmUser,
-		subject: "[Biborrezsi Server] New report on Biborrezsi!",
-		html: content
-	};
-	
-	//Send the message
-	SendMessage(msgData);
-}
+} */
