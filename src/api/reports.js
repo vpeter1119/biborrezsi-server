@@ -132,8 +132,8 @@ router.post("", checkAuth, (req, res, next) => {
 					var diffData = {
 						cold: ((reportCreated.cold - prevRep.cold).toFixed(3)),
 						hot: ((reportCreated.hot - prevRep.hot).toFixed(3)),
-						heat: ((reportCreated.heat - prevRep.heat),
-						elec: ((reportCreated.elec - prevRep.elec)
+						heat: (reportCreated.heat - prevRep.heat),
+						elec: (reportCreated.elec - prevRep.elec)
 					};
 					//Send approve message
 					msg.SendApproveMsg(newReport, diffData, reportCreated._id, newReport.approveToken);
