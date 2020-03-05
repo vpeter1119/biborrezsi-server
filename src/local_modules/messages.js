@@ -20,6 +20,7 @@ const transporter = nodemailer.createTransport({
 
 //Configure generic email instance
 const email = new Email({
+	views: { root: __dirname },
 	message: {from: gmUser},
 	send: true,
 	transport: transporter,	
