@@ -6,6 +6,7 @@ const gmClientId = process.env.GOOGLE_CID;
 const gmClientSecret = process.env.GOOGLE_CS;
 const gmRefreshToken = process.env.GOOGLE_RT;
 const endUserEmail = process.env.ENDUSER_EMAIL;
+const finalEmail = process.env.FINAL_EMAIL;
 const finalRecName = process.env.FINAL_REC_NAME;
 const myAddress = process.env.MY_ADDRESS;
 const myName = process.env.MY_NAME;
@@ -83,7 +84,7 @@ exports.SendFinalMsg = function (reportData) {
 	var msgHtml = '<p>Tisztelt '+finalRecName+'!</p><p>A '+myAddress+' aktuális mérőóra-állásai:</p><br><p>Hidegvíz: '+reportData.cold+'</p><p>Melegvíz: '+reportData.hot+'</p><p>Hőmennyiség: '+reportData.heat+'</p><p>Villanyóra: '+reportData.elec+'</p><br><p>Köszönettel és üdvözlettel:</p><p>'+myName+'</p>';
 	
 	var msgData = {
-		to: gmUser,
+		to: finalEmail,
 		subject: 'Aktuális mérőóra-állások (Bíbor utca)',
 		html: msgHtml
 	}
