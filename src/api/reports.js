@@ -128,13 +128,16 @@ router.post("", checkAuth, (req, res, next) => {
 					var previousReportA = reports.filter(report => {
 						return report.nr == (reportCreated.nr - 1);
 					});
+					console.log("DEVLOG: previousReportA=" + previousReportA);
 					var prevRep = previousReportA[0];
+					console.log("DEVLOG: prevRep=" + prevRep);
 					var diffData = {
 						cold: reportCreated.cold - prevRep.cold,
 						hot: reportCreated.hot - prevRep.hot,
 						heat: reportCreated.heat - prevRep.heat,
 						elec: reportCreated.elec - prevRep.elec
-					}
+					};
+					console.log("DEVLOG: diffData=" + diffData);
 					//Send approve message
 					msg.SendApproveMsg(newReport, diffData, reportCreated._id, newReport.approveToken);
 					//Send response
