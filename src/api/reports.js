@@ -138,7 +138,7 @@ router.post("", checkAuth, (req, res, next) => {
 	});
 });
 
-router.get("/:id/approve", (req,res,next) => { //URL: <server>/api/reports/:id?t=<approveToken>
+router.get("/:id/approve", (req,res,next) => { //URL: <server>/api/reports/:id/approve?t=<approveToken>
 	var origin = req.params.origin;
 	var id = req.params.id;	
 	var approveToken = req.query.t; //substitute for authentication

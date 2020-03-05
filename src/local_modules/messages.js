@@ -1,6 +1,5 @@
 const nodemailer = require("nodemailer");
 const EmailTemplate = require('email-templates').EmailTemplate;
-const mailRoot = (__dirname + '/emails');
 const serverUrl = "https://biborrezsi-server.herokuapp.com/";
 const gmUser = process.env.GMAIL_USER;
 const gmClientId = process.env.GOOGLE_CID;
@@ -20,51 +19,10 @@ const transporter = nodemailer.createTransport({
 	}
 });
 
-//Template-based sender function
-var sendTestEmail = transporter.templateSender(
-	new EmailTemplate('./templates/test'), {from: gmUser}
-);
-
-exports.SendTestMsg = function () {
-	sendTestEmail({
-		to: gmUser,
-		subject: 'Test email from Biborrezsi Server'
-	}, {
-		message: 'This is the correct test message.',
-		link: (serverUrl + '/api/status')
-	}, function (err, info) {
-		if (err) {
-			console.log(err);
-		} else {
-			console.log('Link sent\n' + JSON.stringify(info));
-		}
-	});
-};
-
-///////////////////////////////////////////////////////
-
-//Configure generic email instance
-console.log("DEVLOG: " + mailRoot);
-const email = new Email({
-	views: { root: mailRoot },
-	message: {from: gmUser},
-	send: true,
-	transport: transporter,	
-});
-
 //Message send function (Common)
-function SendMessage(sendTo, msgTemplate, msgData){
-	
-	email.send({
-		//Configure message data
-		template: msgTemplate,
-		message: {to: sendTo},
-		locals: msgData,
-	})
-	.then(console.log)
-	.catch(console.error);
-	
-	/* transporter.sendMail(msgData, (error,info) => {
+function SendMessage(msgData){
+		
+	transporter.sendMail(msgData, (error,info) => {
 		console.log("DEVLOG: Sending message to " + msgData.to);
 		if (error) {
 			console.log(error);
@@ -72,18 +30,34 @@ function SendMessage(sendTo, msgTemplate, msgData){
 		} else {
 			console.log("DEVLOG: Message sent to " + msgData.to + ". Response: " + info.response);
 		}
-	}); */
+	});
 };
 
 //Test message function (Exported)
-/* exports.SendTestMsg = function SendTestMsg() {
+exports.SendTestMsg = function () {
 	//Configure message data
-	var msgTemplate = 'test-message';
+	var link = serverUrl + 'api/status';
+	
 	var msgData = {
-		message: 'This is the correct test message.',
-		link: '/api/status',
+		to: gmUser,
+		subject: '[Biborrezsi] Teszt üzenet',
+		text: 'Kérlek kattints a következő hivatkozásra: ' + link
 	};
 	
 	//Send the message
-	SendMessage(gmUser, msgTemplate, msgData);
-} */
+	SendMessage(msgData);
+}
+
+//Approve message function (Exported)
+exports.SendApproveMsg = function (reportData, reportId, approveToken) {
+	//Configure message data
+	var link = serverUrl + 'api/reports/' + reportId + '/approve?t=' + approveToken;
+	var msgData = {
+		to: gmUser,
+		subject: '[Biborrezsi] Új óraállás-jelentés',
+		text: 'Új jelentés érkezett a Bíbor Rezsi weboldalon. Kattints ide a jóváhagyáshoz: '
+	};
+	
+	//Send the message
+	SendMessage(msgData);
+}

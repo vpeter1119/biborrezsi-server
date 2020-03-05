@@ -72,7 +72,7 @@ app.use("/api/reports", reports);
 app.use("/api/auth", auth);
 
 //Initial operations
-msg.SendTestMsg();
+//msg.SendTestMsg();
 
 ///////////////////////////////////
 //Create server
