@@ -124,7 +124,20 @@ router.post("", checkAuth, (req, res, next) => {
 				} else {
 					console.log(reportCreated);
 					console.log("DEVLOG: New report saved.");
-					msg.SendApproveMsg(newReport, reportCreated._id, newReport.approveToken);
+					//Prepare difference data
+					var previousReportA = reports.filter(report => {
+						return report.nr == (reportCreated.nr - 1);
+					});
+					var prevRep = previousReportA[0];
+					var diffData = {
+						cold: reportCreated.cold - prevRep.cold,
+						hot: reportCreated.hot - prevRep.hot,
+						heat: reportCreated.heat - prevRep.heat,
+						elec: reportCreated.elec - prevRep.elec
+					}
+					//Send approve message
+					msg.SendApproveMsg(newReport, diffData, reportCreated._id, newReport.approveToken);
+					//Send response
 					res.status(201).json({message:"Your report was saved."});
 				}
 			});
@@ -184,7 +197,7 @@ router.get("/:id/approve", (req,res,next) => { //URL: <server>/api/reports/:id/a
 					if (err) {
 						//Handle error
 						console.log(err);
-						console.log("DEVLOG: An error has occured while updating record.");
+						console.log("DEVLOG: An error has occurred while updating record.");
 						reject();
 						res.status(500).json({message: "An error has occurred. Please try again later."});
 					} else {
@@ -204,7 +217,7 @@ router.get("/:id/approve", (req,res,next) => { //URL: <server>/api/reports/:id/a
 					if (err) {
 						//Handle error
 						console.log(err);
-						console.log("DEVLOG: An error has occured while deleting unapproved records.");
+						console.log("DEVLOG: An error has occurred while deleting unapproved records.");
 						res.status(500).json({message: "An error has occurred. Please try again later."});
 					} else {
 						console.log("DEVLOG: Unapproved reports deleted.");
