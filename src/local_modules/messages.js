@@ -55,7 +55,7 @@ exports.SendApproveMsg = function (reportData, reportId, approveToken) {
 	var msgData = {
 		to: gmUser,
 		subject: '[Biborrezsi] Új óraállás-jelentés',
-		text: 'Új jelentés érkezett a Bíbor Rezsi weboldalon. Kattints ide a jóváhagyáshoz: '
+		text: 'Új jelentés érkezett a Bíbor Rezsi weboldalon. Kattints ide a jóváhagyáshoz: ' + link
 	};
 	
 	//Send the message
