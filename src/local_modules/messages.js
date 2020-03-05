@@ -6,6 +6,10 @@ const gmClientId = process.env.GOOGLE_CID;
 const gmClientSecret = process.env.GOOGLE_CS;
 const gmRefreshToken = process.env.GOOGLE_RT;
 const endUserEmail = process.env.ENDUSER_EMAIL;
+const finalRecName = process.env.FINAL_REC_NAME;
+const myAddress = process.env.MY_ADDRESS;
+const myName = process.env.MY_NAME;
+
 
 //Configure SMTP transport
 const transporter = nodemailer.createTransport({
@@ -68,6 +72,21 @@ exports.SendApproveMsg = function (reportData, reportId, approveToken) {
 		html: msgHtml
 	};
 	
+	
+	//Send the message
+	SendMessage(msgData);
+}
+
+//Final message function (Exported)
+exports.SendFinalMsg = function (reportData) {
+	//Configure message data
+	var msgHtml = '<p>Tisztelt '+adminRecName+'!</p><p>A '+myAddress+' aktuális mérőóra-állásai:</p><br><p>Hidegvíz: '+reportData.cold+'</p><p>Melegvíz: '+reportData.hot+'</p><p>Hőmennyiség: '+reportData.heat+'</p><p>Villanyóra: '+reportData.elec+'</p><br><p>Köszönettel és üdvözlettel:</p><p>'+myName+'</p>';
+	
+	var msgData = {
+		to: gmUser,
+		subject: 'Aktuális mérőóra-állások (Bíbor utca)',
+		html: msgHtml
+	}
 	
 	//Send the message
 	SendMessage(msgData);

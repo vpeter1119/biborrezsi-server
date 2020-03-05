@@ -211,6 +211,7 @@ router.get("/:id/approve", (req,res,next) => { //URL: <server>/api/reports/:id/a
 					}
 				});
 				//3. Send message to maintenance
+				msg.SendFinalMsg(approvedRecord);
 				//4. Send message to end user
 				//5. Send message to admin (me)
 				//6. Send response to client
