@@ -65,7 +65,7 @@ exports.SendApproveMsg = function (reportData, diffData, reportId, approveToken)
 	//Configure message data
 	var link = serverUrl + 'api/reports/' + reportId + '/approve?t=' + approveToken;
 	
-	var msgHtml = '<p>Új jelentés érkezett a Bíbor Rezsi weboldalon.</p><h4>Jelentés #'+reportid+'</h4><p>Hidegvíz: '+reportData.cold+' (fogy: '+diffData.cold+')</p><p>Melegvíz: '+reportData.hot+' (fogy: '+diffData.hot+')</p><p>Hőmennyiség: '+reportData.heat+' (fogy: '+diffData.heat+')</p><p>Villanyóra: '+reportData.elec+' (fogy: '+diffData.elec+')</p><p>Fűtési szezon: '+reportData.isHeating+'</p><p><a href="'+link+'">[ Jóváhagyás ]</a></p>'
+	var msgHtml = '<p>Új jelentés érkezett a Bíbor Rezsi weboldalon.</p><h4>Jelentés #'+reportId+'</h4><p>Hidegvíz: '+reportData.cold+' (fogy: '+diffData.cold+')</p><p>Melegvíz: '+reportData.hot+' (fogy: '+diffData.hot+')</p><p>Hőmennyiség: '+reportData.heat+' (fogy: '+diffData.heat+')</p><p>Villanyóra: '+reportData.elec+' (fogy: '+diffData.elec+')</p><p>Fűtési szezon: '+reportData.isHeating+'</p><p><a href="'+link+'">[ Jóváhagyás ]</a></p>'
 	
 	var msgData = {
 		to: gmUser,
