@@ -1,6 +1,6 @@
 const nodemailer = require("nodemailer");
 const Email = require('email-templates');
-const mailRoot = __dirname;
+const mailRoot = path.join(__dirname, 'emails');
 const gmUser = process.env.GMAIL_USER;
 const gmClientId = process.env.GOOGLE_CID;
 const gmClientSecret = process.env.GOOGLE_CS;
