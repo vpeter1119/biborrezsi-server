@@ -22,6 +22,18 @@ function GetAllReports() {
 		}
 	});
 };
+function GetApprovedReports() {
+	return Report.find({isApproved:true}, (err, reports) => {
+		if (err) {
+			console.log(err);
+			console.log("DEVLOG: Could not retrieve reports list from database.");
+			return(null);
+		} else {
+			console.log("DEVLOG: Reports fetched from database.");
+			return(reports);
+		}
+	});
+};
 function FindReport(id) {
 	var idIsValid = (mongoose.Types.ObjectId.isValid(id));
 	if (idIsValid) {
@@ -48,7 +60,7 @@ router.get("", checkAuth, (req, res, next) => {
 	var origin = req.get('origin');
 	console.log("DEVLOG: Reports GET request from: " + origin);
 	var GetAllReportsPromise = new Promise((resolve,reject) => {
-		var reportsList = GetAllReports();
+		var reportsList = GetApprovedReports();
 		setTimeout(()=>{
 			resolve(reportsList);
 		}, 250);
@@ -81,7 +93,7 @@ router.post("", checkAuth, (req, res, next) => {
 	var input = req.body;
 	//Get an array of all reports from DB
 	var GetAllReportsPromise = new Promise((resolve,reject) => {
-		allReports = GetAllReports();
+		allReports = GetApprovedReports();
 		setTimeout(()=>{
 			resolve(allReports);
 		}, 250);
