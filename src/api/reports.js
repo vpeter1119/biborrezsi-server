@@ -132,7 +132,7 @@ router.post("", checkAuth, (req, res, next) => {
 				if (err) {
 					console.log(err);
 					console.log("DEVLOG: Could not save report to database.");
-					res.status(500).json({message:"An error has occurred. Please try again later."});
+					res.status(500).json({message:"Hiba történt. Kérlek, próbálkozz később. Ha a hiba tartósan fennáll, vedd fel velem a kapcsolatot!"});
 				} else {
 					console.log(reportCreated);
 					console.log("DEVLOG: New report saved.");
@@ -157,7 +157,7 @@ router.post("", checkAuth, (req, res, next) => {
 		  //Handle validation rejection
 		  res.status(400).json({
 			  errcode: "BADINPUT",
-			  message: "Input validation failed.",
+			  message: "Hibás óraállások. Kérlek, ellenőrizd az adatokat! Ha a hiba továbbra is fennáll, vedd fel velem a kapcsolatot.",
 		  });
 		});
 	});
@@ -180,7 +180,7 @@ router.get("/:id/approve", (req,res,next) => { //URL: <server>/api/reports/:id/a
 			reject();
 			res.status(404).json({
 				errcode: "NOTFOUND",
-				message: "Could not find report."
+				message: "A kért adat nem létezik, vagy nincs jogosultságod megtekinteni."
 			});
 		}
 	});
@@ -190,14 +190,14 @@ router.get("/:id/approve", (req,res,next) => { //URL: <server>/api/reports/:id/a
 			console.log("DEVLOG: Request denied: report not found.");
 			res.status(404).json({
 				errcode: "NOTFOUND",
-				message: "Could not find report."
+				message: "A kért adat nem létezik, vagy nincs jogosultságod megtekinteni."
 			});
 		} else if (rep.approveToken != approveToken && rep!=null) {
 			console.log("DEVLOG: Request denied: wrong token.");
 			//Deny the request
-			res.status(401).json({
-				errcode: "NOAUTH",
-				message: "Not authorized to access resource."
+			res.status(404).json({
+				errcode: "NOTFOUND",
+				message: "A kért adat nem létezik, vagy nincs jogosultságod megtekinteni."
 			});
 		} else if (rep.approveToken == approveToken && rep!=null) {
 			//Approve the report
@@ -211,7 +211,7 @@ router.get("/:id/approve", (req,res,next) => { //URL: <server>/api/reports/:id/a
 						console.log(err);
 						console.log("DEVLOG: An error has occurred while updating record.");
 						reject();
-						res.status(500).json({message: "An error has occurred. Please try again later."});
+						res.status(500).json({message: "Szerverhiba. Kérlek, próbálkozz később."});
 					} else {
 						setTimeout(()=>{
 							console.log("DEVLOG: Report attribute isApproved set to true.");
@@ -230,7 +230,7 @@ router.get("/:id/approve", (req,res,next) => { //URL: <server>/api/reports/:id/a
 						//Handle error
 						console.log(err);
 						console.log("DEVLOG: An error has occurred while deleting unapproved records.");
-						res.status(500).json({message: "An error has occurred. Please try again later."});
+						res.status(500).json({message: "Szerverhiba. Kérlek, próbálkozz később."});
 					} else {
 						console.log("DEVLOG: Unapproved reports deleted.");
 					}
@@ -240,14 +240,14 @@ router.get("/:id/approve", (req,res,next) => { //URL: <server>/api/reports/:id/a
 				//4. Send message to end user
 				//5. Send message to admin (me)
 				//6. Send response to client
-				res.status(200).json({message:"Report approved successfully."});
+				res.status(200).json({message:"Jelentés jóváhagyva!"});
 			});
 			
 			
 		} else {
 			//This should not be even possible but let's just leave it here for now
 			console.log("DEVLOG: Request denied: other error.");
-			res.status(500).json({message: "An error has occurred. Please try again later."});
+			res.status(500).json({message: "Szerverhiba. Kérlek, próbálkozz később."});
 		}
 	}, () => {
 		//Promise was rejected: could not find report, wrong id?
