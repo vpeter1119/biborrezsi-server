@@ -21,7 +21,7 @@ router.post("/login", (req, res, next) => {
 				console.log(err);
 				res.status(500).json({
 					errcode:"ERR",
-					message:"Could not authenticate due to server-side error. Please try again later, or contact me."
+					message:"A belépés sikertelen a szerver hibája miatt. Kérlek, értesíts  hibáról és próbálkozz később. Elnézést a kellemetlenségért."
 				});
 			} else if (user) {
 				userData = user;
@@ -32,7 +32,7 @@ router.post("/login", (req, res, next) => {
 				console.log("DEVLOG: Authentication failed: could not find user with username " + reqUser);
 				res.status(500).json({
 					errcode:"ERR",
-					message:"Could not authenticate due to server-side error. Please try again later, or contact me."
+					message:"A belépés sikertelen a szerver hibája miatt. Kérlek, értesíts  hibáról és próbálkozz később. Elnézést a kellemetlenségért."
 				});
 			}
 		});	
@@ -55,14 +55,14 @@ router.post("/login", (req, res, next) => {
 			res.status(200).json({
 				token: token,
 				expiresIn: 14400,
-				message: "Authentication successful."
+				message: "Sikeres belépés."
 			});
 		} else {
 			console.log("DEVLOG: Authentication failed: incorrect password.");
 			//Send response
 			res.status(401).json({
 				errcode: "WRONGPW",
-				message: "Authentication failed: wrong password. Please note that the password is case-sensitive."
+				message: "Hibás jelszó. Kérlek, próbálkozz újra. Kis- és nagybetűk számítanak."
 			});
 		}
 	});
