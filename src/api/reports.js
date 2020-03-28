@@ -2,6 +2,7 @@ var app = require("express");
 var router = app.Router();
 var rs = require("randomstring");
 var mongoose = require("mongoose");
+var moment = require("moment");
 
 const Report = require("../models/report.js");
 const checkAuth = require("../middleware/check-auth");
@@ -119,11 +120,18 @@ router.post("", checkAuth, (req, res, next) => {
 				hot: vInput.hot,
 				heat: vInput.heat,
 				elec: vInput.elec,
-				isHeating: vInput.isHeating,
+				//isHeating: vInput.isHeating,
 				isApproved: false,
 			};
 			//Set "nr" attribute
 			newReport.nr = reports.filter(rep => {return rep.isApproved}).length;
+			//Set "isHeating" attribute
+			var currentMonth = parseInt(moment().format("MM"));
+			if (currentMonth<4 || currentMonth>9) {
+				newReport.isHeating = true;
+			} else {
+				newReport.isHeating  = false;
+			}
 			//Set approve token
 			newReport.approveToken = rs.generate();
 			console.log(newReport);
@@ -235,10 +243,11 @@ router.get("/:id/approve", (req,res,next) => { //URL: <server>/api/reports/:id/a
 						console.log("DEVLOG: Unapproved reports deleted.");
 					}
 				});
-				//3. Send message to maintenance
-				msg.SendFinalMsg(approvedRecord);
-				//4. Send message to end user
-				//5. Send message to admin (me)
+				//3. Send message to maintenance after checking if it's late or not
+				var isLateReport = ((moment().date())>4);
+				msg.SendFinalMsg(approvedRecord, isLateReport);
+				//4. Send message to end user and admin (me)
+				msg.SendConfirmation(approvedRecord);
 				//6. Send response to client
 				res.status(200).json({message:"Jelentés jóváhagyva!"});
 			});

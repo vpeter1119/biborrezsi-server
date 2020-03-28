@@ -65,7 +65,7 @@ exports.SendApproveMsg = function (reportData, diffData, reportId, approveToken)
 	//Configure message data
 	var link = serverUrl + 'api/reports/' + reportId + '/approve?t=' + approveToken;
 	
-	var msgHtml = '<p>Új jelentés érkezett a Bíbor Rezsi weboldalon.</p><h4>Jelentés #'+reportId+'</h4><p>Hidegvíz: '+reportData.cold+' (fogy: '+diffData.cold+')</p><p>Melegvíz: '+reportData.hot+' (fogy: '+diffData.hot+')</p><p>Hőmennyiség: '+reportData.heat+' (fogy: '+diffData.heat+')</p><p>Villanyóra: '+reportData.elec+' (fogy: '+diffData.elec+')</p><p>Fűtési szezon: '+reportData.isHeating+'</p><p><a href="'+link+'">[ Jóváhagyás ]</a></p>'
+	var msgHtml = '<p>Új jelentés érkezett a Bíbor Rezsi weboldalon.</p><h4>Jelentés #'+reportId+'</h4><p>Hidegvíz: '+reportData.cold+' (fogy: '+diffData.cold+')</p><p>Melegvíz: '+reportData.hot+' (fogy: '+diffData.hot+')</p><p>Hőmennyiség: '+reportData.heat+' (fogy: '+diffData.heat+')</p><p>Villanyóra: '+reportData.elec+' (fogy: '+diffData.elec+')</p><p><a href="'+link+'">[ Jóváhagyás ]</a></p>'
 	
 	var msgData = {
 		to: gmUser,
@@ -79,13 +79,49 @@ exports.SendApproveMsg = function (reportData, diffData, reportId, approveToken)
 }
 
 //Final message function (Exported)
-exports.SendFinalMsg = function (reportData) {
+exports.SendFinalMsg = function (reportData, isLate) {
 	//Configure message data
-	var msgHtml = '<p>Tisztelt '+finalRecName+'!</p><p>A '+myAddress+' aktuális mérőóra-állásai:</p><br><p>Hidegvíz: '+reportData.cold+'</p><p>Melegvíz: '+reportData.hot+'</p><p>Hőmennyiség: '+reportData.heat+'</p><p>Villanyóra: '+reportData.elec+'</p><br><p>Köszönettel és üdvözlettel:</p><p>'+myName+'</p>';
+	var lateMessage = '';
+	if (isLate) {
+		lateMessage = 'Elnézést kérek a kései leadásért.';
+	}
+	var msgHtml = '<p>Tisztelt '+finalRecName+'!</p><p>A '+myAddress+' aktuális mérőóra-állásai:</p><br><p>Hidegvíz: '+reportData.cold+'</p><p>Melegvíz: '+reportData.hot+'</p><p>Hőmennyiség: '+reportData.heat+'</p><p>Villanyóra: '+reportData.elec+'</p><br><p>'+lateMessage+'</p><br><p>Köszönettel és üdvözlettel:</p><p>'+myName+'</p>';
 	
 	var msgData = {
 		to: finalEmail,
+		bcc: gmUser,
 		subject: 'Aktuális mérőóra-állások (Bíbor utca)',
+		html: msgHtml
+	}
+	
+	//Send the message
+	SendMessage(msgData);
+}
+
+//Monthly reminder (Exported)
+exports.SendReminder = function () {
+	//Configure message data
+	var msgHtml = '<p>Emlékeztető: kérlek, add le az e havi óraállásokat a <a target="_blank" rel="noopener noreferrer" href="https://biborrezsi.web.app/">biborrezsi.web.app</a> oldalon. Köszönöm!</p>';
+	
+	var msgData = {
+		to: endUserEmail,
+		subject: 'Emlékeztető: Aktuális óraállások leadása',
+		html: msgHtml
+	}
+	
+	//Send the message
+	SendMessage(msgData);
+}
+
+//Confirmation message after approval (Exported)
+exports.SendConfirmation = function (reportData) {
+	//Configure message data
+	var msgHtml = '<p>Az alábbi óraállás-jelentés jóvá lett hagyva:</p><p>Hidegvíz: '+reportData.cold+'</p><p>Melegvíz: '+reportData.hot+'</p><p>Hőmennyiség: '+reportData.heat+'</p><p>Villanyóra: '+reportData.elec+'</p>';
+	
+	var msgData = {
+		to: endUserEmail,
+		bcc: gmUser,
+		subject: 'Visszajelzés: aktuális óraállások jóváhagyva',
 		html: msgHtml
 	}
 	

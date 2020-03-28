@@ -71,6 +71,9 @@ app.use("/api/status", status);
 app.use("/api/reports", reports);
 app.use("/api/auth", auth);
 
+//Repeating operations
+// - send reminder email at the end of every month => msg.SendReminder
+
 //Initial operations
 //msg.SendTestMsg();
 
