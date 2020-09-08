@@ -1,3 +1,4 @@
+require('dotenv').config();
 const nodemailer = require("nodemailer");
 
 // General configuration
@@ -35,16 +36,15 @@ const transporter = nodemailer.createTransport({
 });
 
 // Message send function (Common)
-function SendMessage(msgData){
-		
-	transporter.sendMail(msgData, (error,info) => {
-		console.log("Sending message to " + msgData.to);
-		if (error) {
-			console.log(error);
-			console.log("Message was not sent.");
-		} else {
-			console.log(`Message sent to ${info.appected}.`);
-		}
+function SendMessage(msgData) {
+	return new Promise(resolve => {
+		transporter.sendMail(msgData, (error, info) => {
+			if (error) {
+				throw error;
+			} else {
+				resolve(info);
+			}
+		});
 	});
 }
 
@@ -68,7 +68,7 @@ exports.SendTestMsg = function () {
 	};
 	
 	// Send the message
-	SendMessage(msgData);
+	return SendMessage(msgData);
 }
 
 // Approve message function (Exported)
