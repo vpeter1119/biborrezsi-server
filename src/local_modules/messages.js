@@ -46,7 +46,7 @@ function SendMessage(msgData){
 			console.log(`Message sent to ${info.appected}.`);
 		}
 	});
-};
+}
 
 // Test message function (Exported)
 exports.SendTestMsg = function () {
@@ -61,6 +61,7 @@ exports.SendTestMsg = function () {
 	var msgHtml = '<p>Value is ' + testData.key1 + 'two is ' + testData.key2 + ', boolean is ' + testData.key3 + '</p><br><a href="' + link + '">Server Status</a>';
 	
 	var msgData = {
+		from: email_server,
 		to: email_maintainer,
 		subject: '[Biborrezsi] Teszt üzenet',
 		html: msgHtml
@@ -78,6 +79,7 @@ exports.SendApproveMsg = function (reportData, diffData, reportId, approveToken)
 	var msgHtml = '<p>Új jelentés érkezett a Bíbor Rezsi weboldalon.</p><h4>Jelentés #'+reportId+'</h4><p>Hidegvíz: '+reportData.cold+' (fogy: '+diffData.cold+')</p><p>Melegvíz: '+reportData.hot+' (fogy: '+diffData.hot+')</p><p>Hőmennyiség: '+reportData.heat+' (fogy: '+diffData.heat+')</p><p>Villanyóra: '+reportData.elec+' (fogy: '+diffData.elec+')</p><p><a href="'+link+'">[ Jóváhagyás ]</a></p>'
 	
 	var msgData = {
+		from: email_server,
 		to: email_maintainer,
 		bcc: gmUser,
 		subject: '[Biborrezsi] Új óraállás-jelentés',
@@ -99,6 +101,7 @@ exports.SendFinalMsg = function (reportData, isLate) {
 	var msgHtml = '<p>Tisztelt '+name_reportTo+'!</p><p>A '+myAddress+' aktuális mérőóra-állásai:</p><br><p>Hidegvíz: '+reportData.cold+'</p><p>Melegvíz: '+reportData.hot+'</p><p>Hőmennyiség: '+reportData.heat+'</p><p>Villanyóra: '+reportData.elec+'</p><br><p>'+lateMessage+'</p><br><p>Köszönettel és üdvözlettel:</p><p>'+myName+'</p>';
 	
 	var msgData = {
+		from: email_server,
 		to: email_reportTo,
 		bcc: email_maintainer,
 		subject: 'Aktuális mérőóra-állások (Bíbor utca)',
@@ -115,6 +118,7 @@ exports.SendReminder = function () {
 	var msgHtml = '<p>Emlékeztető: kérlek, add le az e havi óraállásokat a <a target="_blank" rel="noopener noreferrer" href="https://biborrezsi.web.app/">biborrezsi.web.app</a> oldalon. Köszönöm!</p>';
 	
 	var msgData = {
+		from: email_server,
 		to: email_user,
 		subject: 'Emlékeztető: Aktuális óraállások leadása',
 		html: msgHtml
@@ -130,6 +134,7 @@ exports.SendConfirmation = function (reportData) {
 	var msgHtml = '<p>Az alábbi óraállás-jelentés jóvá lett hagyva:</p><p>Hidegvíz: '+reportData.cold+'</p><p>Melegvíz: '+reportData.hot+'</p><p>Hőmennyiség: '+reportData.heat+'</p><p>Villanyóra: '+reportData.elec+'</p>';
 	
 	var msgData = {
+		from: email_server,
 		to: email_user,
 		bcc: email_maintainer,
 		subject: 'Visszajelzés: aktuális óraállások jóváhagyva',

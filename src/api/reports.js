@@ -22,7 +22,7 @@ function GetAllReports() {
 			return(reports);
 		}
 	});
-};
+}
 function GetApprovedReports() {
 	return Report.find({isApproved:true}, (err, reports) => {
 		if (err) {
@@ -34,7 +34,7 @@ function GetApprovedReports() {
 			return(reports);
 		}
 	});
-};
+}
 function FindReport(id) {
 	var idIsValid = (mongoose.Types.ObjectId.isValid(id));
 	if (idIsValid) {
@@ -53,7 +53,7 @@ function FindReport(id) {
 		return(null);
 	}
 	
-};
+}
 
 //API endpoints
 
