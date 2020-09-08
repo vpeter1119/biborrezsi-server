@@ -2,25 +2,37 @@ const nodemailer = require("nodemailer");
 const EmailTemplate = require('email-templates').EmailTemplate;
 const serverUrl = "https://biborrezsi-server.herokuapp.com/";
 const gmUser = process.env.GMAIL_USER;
-const gmClientId = process.env.GOOGLE_CID;
-const gmClientSecret = process.env.GOOGLE_CS;
-const gmRefreshToken = process.env.GOOGLE_RT;
 const endUserEmail = process.env.ENDUSER_EMAIL;
 const finalEmail = process.env.FINAL_EMAIL;
 const finalRecName = process.env.FINAL_REC_NAME;
 const myAddress = process.env.MY_ADDRESS;
 const myName = process.env.MY_NAME;
 
+// SMTP configuration
+const smtp_host = process.env.SMTP_HOST;
+const smtp_port = process.env.SMTP_PORT;
+const smtp_user = process.env.SMTP_USER;
+const smtp_pass = process.env.SMTP_PASS;
 
-//Configure SMTP transport
+// Message configuration
+const email_server = process.env.EMAIL_SERVER; // For the 'from' property
+const email_maintainer = process.env.EMAIL_MAINTAINER; // Secret copy to developer address
+const email_user = process.env.EMAIL_USER; // Confirmation is sent to the user after approving report => this should be handled dynamically later
+const email_reportTo = process.env.EMAIL_REPORTTO; // Who to send the final report to
+const name_reportTo = process.env.NAME_REPORTTO; // How to adress them
+
+
+// Configure SMTP transport
 const transporter = nodemailer.createTransport({
-	host: "smtp.gmail.com",
+	host: smtp_host,
+	port: smtp_port,
+	secure: false,
 	auth: {
-		type: "OAuth2",
-		user: gmUser,
-		clientId: gmClientId,
-		clientSecret: gmClientSecret,
-		refreshToken: gmRefreshToken,
+		user: smtp_user,
+		pass: smtp_pass
+	},
+	tls: {
+		rejectUnauthorized: false
 	}
 });
 
@@ -28,12 +40,12 @@ const transporter = nodemailer.createTransport({
 function SendMessage(msgData){
 		
 	transporter.sendMail(msgData, (error,info) => {
-		console.log("DEVLOG: Sending message to " + msgData.to);
+		console.log("Sending message to " + msgData.to);
 		if (error) {
 			console.log(error);
-			console.log("DEVLOG: Message was not sent.");
+			console.log("Message was not sent.");
 		} else {
-			console.log("DEVLOG: Message sent to " + msgData.to + ". Response: " + info.response);
+			console.log(`Message sent to ${info.appected}.`);
 		}
 	});
 };
@@ -51,7 +63,7 @@ exports.SendTestMsg = function () {
 	var msgHtml = '<p>Value is ' + testData.key1 + 'two is ' + testData.key2 + ', boolean is ' + testData.key3 + '</p><br><a href="' + link + '">Server Status</a>';
 	
 	var msgData = {
-		to: gmUser,
+		to: email_maintainer,
 		subject: '[Biborrezsi] Teszt üzenet',
 		html: msgHtml
 	};
