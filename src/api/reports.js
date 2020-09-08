@@ -57,10 +57,10 @@ function FindReport(id) {
 
 //API endpoints
 
-router.get("", checkAuth, (req, res, next) => {
+router.get("", checkAuth, (req, res) => {
 	var origin = req.get('origin');
 	console.log("DEVLOG: Reports GET request from: " + origin);
-	var GetAllReportsPromise = new Promise((resolve,reject) => {
+	var GetAllReportsPromise = new Promise((resolve) => {
 		var reportsList = GetApprovedReports();
 		setTimeout(()=>{
 			resolve(reportsList);
@@ -88,12 +88,12 @@ router.get("", checkAuth, (req, res, next) => {
 	});
 });
 
-router.post("", checkAuth, (req, res, next) => {
+router.post("", checkAuth, (req, res) => {
 	var origin = req.get('origin');
 	console.log("DEVLOG: Reports POST request from: " + origin);
 	var input = req.body;
 	//Get an array of all reports from DB
-	var GetAllReportsPromise = new Promise((resolve,reject) => {
+	var GetAllReportsPromise = new Promise((resolve) => {
 		allReports = GetApprovedReports();
 		setTimeout(()=>{
 			resolve(allReports);
@@ -171,7 +171,7 @@ router.post("", checkAuth, (req, res, next) => {
 	});
 });
 
-router.get("/:id/approve", (req,res,next) => { //URL: <server>/api/reports/:id/approve?t=<approveToken>
+router.get("/:id/approve", (req,res) => { //URL: <server>/api/reports/:id/approve?t=<approveToken>
 	var origin = req.params.origin;
 	var id = req.params.id;	
 	var approveToken = req.query.t; //substitute for authentication

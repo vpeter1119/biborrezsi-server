@@ -5,7 +5,7 @@ const User = require("../models/user.js");
 const jwtSecret = process.env.JWT_SECRET;
 
 //Authentication with jsonwebtoken
-router.post("/login", (req, res, next) => {
+router.post("/login", (req, res) => {
 	var reqUser = req.body.username;
 	console.log("Authentication request, username=" + reqUser);
 	var userData = {};
@@ -14,7 +14,7 @@ router.post("/login", (req, res, next) => {
 	console.log("inputPW=" + inputPW);	
 	
 	//Get user data from DB for password compare
-	var promiseGetUserData = new Promise((resolve, reject) => {
+	var promiseGetUserData = new Promise((resolve) => {
 		User.findOne({'username':reqUser}, (err,user) => {
 			if (err) {
 				console.log("Other error:")

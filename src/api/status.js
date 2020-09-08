@@ -1,7 +1,7 @@
 var app = require("express");
 var router = app.Router();
 
-router.get("", (req, res, next) => {
+router.get("", (req, res) => {
   res.status(200).json({
     running: true
   });

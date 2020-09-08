@@ -1,4 +1,3 @@
-var http = require("http");
 require('dotenv').config()
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -6,8 +5,7 @@ const mongoose = require("mongoose");
 const listenPort = process.env.PORT;
 
 //Set up local modules
-const msg = require("./local_modules/messages.js");
-
+//const msg = require("./local_modules/messages.js");
 
 //Setup Express
 
@@ -55,7 +53,7 @@ mongoose.connect(
 
 
 //Handle basic GET request
-app.get("/", (req, res, next) => {
+app.get("/", (req, res) => {
   var origin = req.get('origin');
   console.log("DEVLOG: Root GET request from: " + origin);
   res.sendFile("index.html", {root: __dirname });
@@ -74,8 +72,6 @@ app.use("/api/auth", auth);
 //Repeating operations
 // - send reminder email at the end of every month => msg.SendReminder
 
-//Initial operations
-//msg.SendTestMsg();
 
 ///////////////////////////////////
 //Create server
