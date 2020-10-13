@@ -1,5 +1,11 @@
 # biborrezsi-server
-A server for the personal overhead expenses app. The purpose of this project is to make my life easier and practice building a simple CRUD web app.
+A server for the personal overhead expenses app.
+
+The purpose of this project is to make my life easier and practice building a simple CRUD web app with the following feautures:
+* input validation
+* simple authentication
+* sending automatic emails
+* using confirmation links with randomly generated approve tokens
 
 #### API endpoints
 * `/status` GET → returns `{running:true}`, used to ping server to wake up
@@ -14,5 +20,4 @@ A server for the personal overhead expenses app. The purpose of this project is 
 * [Dotenv](https://github.com/motdotla/dotenv)
 * [JSON Web Token (JWT)](https://github.com/auth0/node-jsonwebtoken) for authentication
 * [Nodemailer](https://github.com/nodemailer/nodemailer)
-* [email-templates](https://github.com/forwardemail/email-templates)
 * [Randomstring](https://github.com/klughammer/node-randomstring) for approve token creation
