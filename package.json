@@ -15,7 +15,7 @@
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
     "mongoose": ">=5.7.5",
-    "nodemailer": "^6.4.2",
+    "nodemailer": "^6.4.16",
     "randomstring": "^1.1.5",
     "underscore": "^1.9.2"
   },
