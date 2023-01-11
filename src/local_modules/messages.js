@@ -65,7 +65,7 @@ exports.SendApproveMsg = function (reportData, diffData, reportId, approveToken)
 	//Configure message data
 	var link = serverUrl + 'api/reports/' + reportId + '/approve?t=' + approveToken;
 	
-	var msgHtml = '<p>Új jelentés érkezett a Bíbor Rezsi weboldalon.</p><h4>Jelentés #'+reportId+'</h4><p>Hidegvíz: '+reportData.cold+' (fogy: '+diffData.cold+')</p><p>Melegvíz: '+reportData.hot+' (fogy: '+diffData.hot+')</p><p>Hőmennyiség: '+reportData.heat+' (fogy: '+diffData.heat+')</p><p>Villanyóra: '+reportData.elec+' (fogy: '+diffData.elec+')</p><p><a href="'+link+'">[ Jóváhagyás ]</a></p>'
+	var msgHtml = '<p>Új jelentés érkezett a Bíbor Rezsi weboldalon.</p><h4>Jelentés #'+reportId+'</h4><p>Hidegvíz: '+reportData.cold.toFixed(3)+' (fogy: '+diffData.cold.toFixed(3)+')</p><p>Melegvíz: '+reportData.hot.toFixed(3)+' (fogy: '+diffData.hot.toFixed(3)+')</p><p>Hőmennyiség: '+reportData.heat+' (fogy: '+diffData.heat+')</p><p>Villanyóra: '+reportData.elec+' (fogy: '+diffData.elec+')</p><p><a href="'+link+'">[ Jóváhagyás ]</a></p>'
 	
 	var msgData = {
 		to: gmUser,
@@ -85,7 +85,7 @@ exports.SendFinalMsg = function (reportData, isLate) {
 	if (isLate) {
 		lateMessage = 'Elnézést kérek a kései leadásért.';
 	}
-	var msgHtml = '<p>Tisztelt '+finalRecName+'!</p><p>A '+myAddress+' aktuális mérőóra-állásai:</p><br><p>Hidegvíz: '+reportData.cold+'</p><p>Melegvíz: '+reportData.hot+'</p><p>Hőmennyiség: '+reportData.heat+'</p><p>Villanyóra: '+reportData.elec+'</p><br><p>'+lateMessage+'</p><br><p>Köszönettel és üdvözlettel:</p><p>'+myName+'</p>';
+	var msgHtml = '<p>Tisztelt '+finalRecName+'!</p><p>A '+myAddress+' aktuális mérőóra-állásai:</p><br><p>Hidegvíz: '+reportData.cold.toFixed(3)+'</p><p>Melegvíz: '+reportData.hot.toFixed(3)+'</p><p>Hőmennyiség: '+reportData.heat+'</p><p>Villanyóra: '+reportData.elec+'</p><br><p>'+lateMessage+'</p><br><p>Köszönettel és üdvözlettel:</p><p>'+myName+'</p>';
 	
 	var msgData = {
 		to: finalEmail,
@@ -116,7 +116,7 @@ exports.SendReminder = function () {
 //Confirmation message after approval (Exported)
 exports.SendConfirmation = function (reportData) {
 	//Configure message data
-	var msgHtml = '<p>Az alábbi óraállás-jelentés jóvá lett hagyva:</p><p>Hidegvíz: '+reportData.cold+'</p><p>Melegvíz: '+reportData.hot+'</p><p>Hőmennyiség: '+reportData.heat+'</p><p>Villanyóra: '+reportData.elec+'</p>';
+	var msgHtml = '<p>Az alábbi óraállás-jelentés jóvá lett hagyva:</p><p>Hidegvíz: '+reportData.cold.toFixed(3)+'</p><p>Melegvíz: '+reportData.hot.toFixed(3)+'</p><p>Hőmennyiség: '+reportData.heat+'</p><p>Villanyóra: '+reportData.elec+'</p>';
 	
 	var msgData = {
 		to: endUserEmail,
