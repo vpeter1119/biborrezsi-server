@@ -1,6 +1,6 @@
 const nodemailer = require("nodemailer");
 const EmailTemplate = require('email-templates').EmailTemplate;
-const serverUrl = "https://biborrezsi-server.herokuapp.com/";
+const serverUrl = "https://petervertesi.com/dev-server/";
 const gmUser = process.env.GMAIL_USER;
 const gmClientId = process.env.GOOGLE_CID;
 const gmClientSecret = process.env.GOOGLE_CS;

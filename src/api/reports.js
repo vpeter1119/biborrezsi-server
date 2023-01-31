@@ -75,8 +75,8 @@ router.get("", checkAuth, (req, res, next) => {
 			});
 			var responseData = responseDataRaw.map( function (rep) {
 				return {
-					cold: rep.cold,
-					hot: rep.hot,
+					cold: parseFloat(rep.cold.toFixed(3)),
+					hot: parseFloat(rep.hot.toFixed(3)),
 					heat: rep.heat,
 					elec: rep.elec,
 					isHeating: rep.isHeating,
