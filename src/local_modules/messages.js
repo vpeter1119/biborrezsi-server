@@ -1,6 +1,6 @@
 const nodemailer = require("nodemailer");
 const EmailTemplate = require('email-templates').EmailTemplate;
-const serverUrl = "https://biborrezsi-server.herokuapp.com/";
+const serverUrl = "https://petervertesi.com/dev-server/";
 const gmUser = process.env.GMAIL_USER;
 const gmClientId = process.env.GOOGLE_CID;
 const gmClientSecret = process.env.GOOGLE_CS;
@@ -65,7 +65,7 @@ exports.SendApproveMsg = function (reportData, diffData, reportId, approveToken)
 	//Configure message data
 	var link = serverUrl + 'api/reports/' + reportId + '/approve?t=' + approveToken;
 	
-	var msgHtml = '<p>Új jelentés érkezett a Bíbor Rezsi weboldalon.</p><h4>Jelentés #'+reportId+'</h4><p>Hidegvíz: '+reportData.cold.toFixed(3)+' (fogy: '+diffData.cold.toFixed(3)+')</p><p>Melegvíz: '+reportData.hot.toFixed(3)+' (fogy: '+diffData.hot.toFixed(3)+')</p><p>Hőmennyiség: '+reportData.heat+' (fogy: '+diffData.heat+')</p><p>Villanyóra: '+reportData.elec+' (fogy: '+diffData.elec+')</p><p><a href="'+link+'">[ Jóváhagyás ]</a></p>'
+	var msgHtml = '<p>Új jelentés érkezett a Bíbor Rezsi weboldalon.</p><h4>Jelentés #'+reportId+'</h4><p>Hidegvíz: '+reportData.cold.toFixed(3)+' (fogy: '+diffData.cold+')</p><p>Melegvíz: '+reportData.hot.toFixed(3)+' (fogy: '+diffData.hot+')</p><p>Hőmennyiség: '+reportData.heat+' (fogy: '+diffData.heat+')</p><p>Villanyóra: '+reportData.elec+' (fogy: '+diffData.elec+')</p><p><a href="'+link+'">[ Jóváhagyás ]</a></p>'
 	
 	var msgData = {
 		to: gmUser,
